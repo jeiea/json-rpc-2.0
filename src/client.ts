@@ -13,7 +13,7 @@ import { DefaultErrorCode } from "./internal";
 
 export type SendRequest<ClientParams> = (
   payload: any,
-  clientParams: ClientParams
+  clientParams?: ClientParams
 ) => PromiseLike<void> | void;
 export type CreateID = () => JSONRPCID;
 
@@ -124,8 +124,8 @@ export class JSONRPCClient<ClientParams = void>
 
   request(
     method: string,
-    params: JSONRPCParams,
-    clientParams: ClientParams
+    params?: JSONRPCParams,
+    clientParams?: ClientParams
   ): PromiseLike<any> {
     return this.requestWithID(method, params, clientParams, this._createID());
   }
@@ -133,7 +133,7 @@ export class JSONRPCClient<ClientParams = void>
   private async requestWithID(
     method: string,
     params: JSONRPCParams | undefined,
-    clientParams: ClientParams,
+    clientParams: ClientParams | undefined,
     id: JSONRPCID
   ): Promise<any> {
     const request: JSONRPCRequest = createJSONRPCRequest(id, method, params);
@@ -159,15 +159,15 @@ export class JSONRPCClient<ClientParams = void>
 
   requestAdvanced(
     request: JSONRPCRequest,
-    clientParams: ClientParams
+    clientParams?: ClientParams
   ): PromiseLike<JSONRPCResponse>;
   requestAdvanced(
     request: JSONRPCRequest[],
-    clientParams: ClientParams
+    clientParams?: ClientParams
   ): PromiseLike<JSONRPCResponse[]>;
   requestAdvanced(
     requests: JSONRPCRequest | JSONRPCRequest[],
-    clientParams: ClientParams
+    clientParams?: ClientParams
   ): PromiseLike<JSONRPCResponse | JSONRPCResponse[]> {
     const areRequestsOriginallyArray = Array.isArray(requests);
     if (!Array.isArray(requests)) {
@@ -214,15 +214,15 @@ export class JSONRPCClient<ClientParams = void>
 
   notify(
     method: string,
-    params: JSONRPCParams,
-    clientParams: ClientParams
+    params?: JSONRPCParams,
+    clientParams?: ClientParams
   ): void {
     const request: JSONRPCRequest = createJSONRPCNotification(method, params);
 
     this.send(request, clientParams).then(undefined, () => undefined);
   }
 
-  async send(payload: any, clientParams: ClientParams): Promise<void> {
+  async send(payload: any, clientParams?: ClientParams): Promise<void> {
     return this._send(payload, clientParams);
   }
 

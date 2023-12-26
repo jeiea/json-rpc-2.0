@@ -34,7 +34,7 @@ describe("JSONRPCClient", () => {
 
     const send = (
       request: JSONRPCRequest,
-      clientParams: ClientParams
+      clientParams?: ClientParams
     ): PromiseLike<void> => {
       lastRequest = request;
       lastClientParams = clientParams;
